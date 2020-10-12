@@ -1,4 +1,4 @@
-package com.sairanadheer.bharatagriassignment.ui.main;
+package com.sairanadheer.bharatagriassignment.viewmodel;
 
 import androidx.lifecycle.ViewModel;
 

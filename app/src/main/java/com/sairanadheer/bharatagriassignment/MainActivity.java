@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.sairanadheer.bharatagriassignment.ui.main.MainFragment;
+import com.sairanadheer.bharatagriassignment.ui.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
 
