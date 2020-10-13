@@ -10,4 +10,5 @@
     <dimen name="dimen05dp">5dp</dimen>
     <dimen name="dimen01dp">1dp</dimen>
     <dimen name="dimen08dp">8dp</dimen>
+    <dimen name="dimen12sp">12sp</dimen>
 </resources>

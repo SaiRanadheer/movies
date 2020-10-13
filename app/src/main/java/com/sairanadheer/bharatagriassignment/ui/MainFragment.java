@@ -4,7 +4,6 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.animation.ObjectAnimator;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -16,7 +15,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,11 +35,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
 
@@ -113,6 +111,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             MaterialTextView descendingReleaseDate = sortOptionsDialog.findViewById(R.id.descending_release_date );
             MaterialTextView ratingDescending = sortOptionsDialog.findViewById(R.id.rating_descending);
             MaterialTextView ratingAscending = sortOptionsDialog.findViewById(R.id.rating_ascending);
+            MaterialTextView reset = sortOptionsDialog.findViewById(R.id.reset);
+            AtomicBoolean sortingFlag = new AtomicBoolean(false);
 
             descendingReleaseDate.setOnClickListener(v1 -> {
                 List<Movie> movies = new ArrayList<>(mMovies);
@@ -135,6 +135,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 });
                 mAdapter.setMovies(movies);
                 mNowShowingMovies.setAdapter(mAdapter);
+                sortingFlag.set(true);
                 sortOptionsDialog.dismiss();
             });
 
@@ -159,6 +160,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 });
                 mAdapter.setMovies(movies);
                 mNowShowingMovies.setAdapter(mAdapter);
+                sortingFlag.set(true);
                 sortOptionsDialog.dismiss();
             });
 
@@ -167,6 +169,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 Collections.sort(movies, (movie1, movie2) -> Double.compare(movie1.getVoteAverage(), movie2.getVoteAverage()));
                 mAdapter.setMovies(movies);
                 mNowShowingMovies.setAdapter(mAdapter);
+                sortingFlag.set(true);
                 sortOptionsDialog.dismiss();
             });
 
@@ -175,7 +178,16 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 Collections.sort(movies, (movie1, movie2) -> Double.compare(movie2.getVoteAverage(), movie1.getVoteAverage()));
                 mAdapter.setMovies(movies);
                 mNowShowingMovies.setAdapter(mAdapter);
+                sortingFlag.set(true);
                 sortOptionsDialog.dismiss();
+            });
+
+            reset.setOnClickListener(v5 -> {
+                if(sortingFlag.get()) {
+                    mAdapter.setMovies(mMovies);
+                    mNowShowingMovies.setAdapter(mAdapter);
+                    sortOptionsDialog.dismiss();
+                }
             });
 
             sortOptionsDialog.show();
