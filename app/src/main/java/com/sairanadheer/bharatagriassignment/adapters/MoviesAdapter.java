@@ -11,8 +11,12 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.FitCenter;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.textview.MaterialTextView;
 import com.sairanadheer.bharatagriassignment.R;
+import com.sairanadheer.bharatagriassignment.databinding.MainFragmentBinding;
 import com.sairanadheer.bharatagriassignment.util.Common;
 import com.sairanadheer.bharatagriassignment.util.Constants;
 import com.sairanadheer.bharatagriassignment.vo.Movie;
@@ -25,13 +29,15 @@ import java.util.Locale;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdapterViewHolder> {
 
+    private final MainFragmentBinding mMainFragmentBinding;
     private List<Movie> mMovies;
     private Context mContext;
     private static final DateFormat mApiDateFormat = new SimpleDateFormat(Constants.API_DATE_FORMAT, Locale.ROOT);
     private static final DateFormat mDisplayDateFormat = new SimpleDateFormat(Constants.DISPLAY_DATE_FORMAT, Locale.ROOT);
 
-    public MoviesAdapter(Context context) {
+    public MoviesAdapter(Context context, MainFragmentBinding mainFragmentBinding) {
         this.mContext = context;
+        this.mMainFragmentBinding = mainFragmentBinding;
     }
 
     public void setMovies(List<Movie> movies) {
@@ -62,9 +68,18 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
             }
             holder.mMovieName.setText(mMovies.get(position).getTitle());
             holder.mMovieCardLayout.setOnClickListener(v -> {
-                /*DialogFragment movieDetailsFragment = MovieDetailsFragment.newInstance(mMovies.get(position).getId());
-                movieDetailsFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme);
-                movieDetailsFragment.show(((FragmentActivity) mContext).getSupportFragmentManager(), "MovieDetailsFragment");*/
+                mMainFragmentBinding.back.setVisibility(View.VISIBLE);
+                mMainFragmentBinding.detailsLayout.setVisibility(View.VISIBLE);
+                RequestOptions options = new RequestOptions().transform(new FitCenter(), new RoundedCorners(24));
+                Glide.with(mContext).load(Constants.ORIGINAL_IMAGE_BASE_URL.concat(mMovies.get(position).getBackdropPath())).apply(options).placeholder(android.R.drawable.progress_indeterminate_horizontal).
+                        into(mMainFragmentBinding.backdrop);
+                mMainFragmentBinding.nowShowingMovies.setVisibility(View.GONE);
+                mMainFragmentBinding.sortIcon.setVisibility(View.GONE);
+                mMainFragmentBinding.headerTitle.setText(mMovies.get(position).getTitle());
+                mMainFragmentBinding.votingAverage.setText(String.valueOf(mMovies.get(position).getVoteAverage()));
+                mMainFragmentBinding.votingCount.setText(String.valueOf(mMovies.get(position).getVoteCount()));
+                mMainFragmentBinding.overview.setText(String.valueOf(mMovies.get(position).getOverview()));
+                mMainFragmentBinding.releaseDateDetails.setText(String.valueOf(mMovies.get(position).getReleaseDate()));
             });
         } catch (Exception e) {
             Common.showAlert(mContext);

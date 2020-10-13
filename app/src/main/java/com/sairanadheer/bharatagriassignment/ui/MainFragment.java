@@ -1,5 +1,6 @@
 package com.sairanadheer.bharatagriassignment.ui;
 
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -39,7 +40,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
 
@@ -49,6 +49,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private RecyclerView mNowShowingMovies;
     private FloatingActionButton mSortIcon;
     private List<Movie> mMovies = new ArrayList<>();
+    private boolean mSortingFlag = false;
+    private MaterialTextView mHeaderTitle;
+    private AppCompatImageView mBack;
+    private LinearLayoutCompat mDetailsLayout;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -66,14 +70,18 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     private void configureViewListeners() {
         mSortIcon.setOnClickListener(this);
+        mBack.setOnClickListener(this);
     }
 
     private void configureElements() {
         mNowShowingMovies = mBinding.nowShowingMovies;
         mSortIcon = mBinding.sortIcon;
+        mHeaderTitle = mBinding.headerTitle;
+        mBack = mBinding.back;
+        mDetailsLayout = mBinding.detailsLayout;
         mNowShowingMovies.setHasFixedSize(true);
         mNowShowingMovies.setLayoutManager(new GridLayoutManager(requireContext(), 2));
-        mAdapter = new MoviesAdapter(requireContext());
+        mAdapter = new MoviesAdapter(requireContext(), mBinding);
     }
 
     @Override
@@ -112,7 +120,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             MaterialTextView ratingDescending = sortOptionsDialog.findViewById(R.id.rating_descending);
             MaterialTextView ratingAscending = sortOptionsDialog.findViewById(R.id.rating_ascending);
             MaterialTextView reset = sortOptionsDialog.findViewById(R.id.reset);
-            AtomicBoolean sortingFlag = new AtomicBoolean(false);
 
             descendingReleaseDate.setOnClickListener(v1 -> {
                 List<Movie> movies = new ArrayList<>(mMovies);
@@ -135,7 +142,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 });
                 mAdapter.setMovies(movies);
                 mNowShowingMovies.setAdapter(mAdapter);
-                sortingFlag.set(true);
+                mSortingFlag = true;
                 sortOptionsDialog.dismiss();
             });
 
@@ -160,7 +167,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 });
                 mAdapter.setMovies(movies);
                 mNowShowingMovies.setAdapter(mAdapter);
-                sortingFlag.set(true);
+                mSortingFlag = true;
                 sortOptionsDialog.dismiss();
             });
 
@@ -169,7 +176,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 Collections.sort(movies, (movie1, movie2) -> Double.compare(movie1.getVoteAverage(), movie2.getVoteAverage()));
                 mAdapter.setMovies(movies);
                 mNowShowingMovies.setAdapter(mAdapter);
-                sortingFlag.set(true);
+                mSortingFlag = true;
                 sortOptionsDialog.dismiss();
             });
 
@@ -178,12 +185,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 Collections.sort(movies, (movie1, movie2) -> Double.compare(movie2.getVoteAverage(), movie1.getVoteAverage()));
                 mAdapter.setMovies(movies);
                 mNowShowingMovies.setAdapter(mAdapter);
-                sortingFlag.set(true);
+                mSortingFlag = true;
                 sortOptionsDialog.dismiss();
             });
 
             reset.setOnClickListener(v5 -> {
-                if(sortingFlag.get()) {
+                if(mSortingFlag) {
                     mAdapter.setMovies(mMovies);
                     mNowShowingMovies.setAdapter(mAdapter);
                     sortOptionsDialog.dismiss();
@@ -191,6 +198,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             });
 
             sortOptionsDialog.show();
+        } else if(v.getId() == mBack.getId()) {
+            mHeaderTitle.setText(R.string.header_title);
+            mNowShowingMovies.setVisibility(View.VISIBLE);
+            mSortIcon.setVisibility(View.VISIBLE);
+            mBack.setVisibility(View.GONE);
+            mDetailsLayout.setVisibility(View.GONE);
         }
     }
 }

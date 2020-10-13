@@ -2,4 +2,8 @@
     <string name="app_name">BharatAgri Assignment</string>
     <string name="header_title">Now Showing</string>
     <string name="reset">Reset</string>
+    <string name="voting_average">Voting Average: </string>
+    <string name="votes_count">Votes Count: </string>
+    <string name="overview">Overview</string>
+    <string name="release_date">Release Date: </string>
 </resources>
