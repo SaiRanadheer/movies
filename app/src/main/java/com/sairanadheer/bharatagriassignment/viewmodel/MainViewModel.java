@@ -1,7 +1,6 @@
 package com.sairanadheer.bharatagriassignment.viewmodel;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -25,7 +24,6 @@ public class MainViewModel extends AndroidViewModel {
         MovieRepository repository = new MovieRepository(application);
         this.page++;
         movies = repository.getMovies(this::defaultSuccessHandler, this::defaultFailureHandler, page);
-        Log.e("MyTAG", "Movies List");
     }
 
     public LiveData<List<Movie>> getMovies() {
