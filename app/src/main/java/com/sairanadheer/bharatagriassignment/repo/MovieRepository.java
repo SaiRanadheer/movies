@@ -10,7 +10,7 @@ import com.sairanadheer.bharatagriassignment.api.Service;
 import com.sairanadheer.bharatagriassignment.api.ServiceGenerator;
 import com.sairanadheer.bharatagriassignment.db.AppDatabase;
 import com.sairanadheer.bharatagriassignment.db.dao.MovieDao;
-import com.sairanadheer.bharatagriassignment.utils.Constants;
+import com.sairanadheer.bharatagriassignment.util.Constants;
 import com.sairanadheer.bharatagriassignment.vo.LatestMovies;
 import com.sairanadheer.bharatagriassignment.vo.Movie;
 

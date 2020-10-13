@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BharatAgri Assignment</string>
+    <string name="header_title">Now Showing</string>
 </resources>
